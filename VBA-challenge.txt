@@ -1,0 +1,68 @@
+Dim counter As Integer
+    Dim year_change As Double
+    Dim closeP As Double
+    Dim openP As Double
+    Dim percent_change As Double
+    Dim total_volume As Double
+    
+    'Inital variable assignments
+    counter = 2
+    counter1 = 2
+    total_volume = 0
+    
+    
+    'column header names
+    Range("I1").Value = "Ticker"
+    Range("J1").Value = "Yearly Change"
+    Range("K1").Value = "Percent Change"
+    Range("L1").Value = "Total Stock Volume"
+    
+    'Determining last row in data set for for loop
+    LastRow = Cells(Rows.Count, 1).End(xlUp).Row
+    
+    'For loop iterating through all rows
+        For i = 2 To LastRow
+            
+    'This if statement is searching for the 2 cells where one ticker changes to the next
+            If (Cells(i + 1, 1).Value <> Cells(i, 1).Value) Then
+                total_volume = total_volume + Cells(i, 7).Value
+                
+                Cells(counter, 9).Value = Cells(i, 1).Value
+                
+                closeP = Cells(i, 6)
+                openP = Cells(counter1, 3)
+                year_change = closeP - openP
+                Cells(counter, 10).Value = year_change
+                
+                percent_change = year_change / openP
+                Cells(counter, 11).Value = percent_change
+                Cells(counter, 11).NumberFormat = "0.00%"
+                
+                Cells(counter, 12).Value = total_volume
+    
+    'Conditional formatting here for yearly change column
+                If (year_change > 0) Then
+                    Cells(counter, 10).Interior.ColorIndex = 4
+                    
+                Else
+                    Cells(counter, 10).Interior.ColorIndex = 3
+                    
+                End If
+                
+                
+                
+                counter1 = counter1 + 251
+                counter = counter + 1
+                total_volume = 0
+               
+     'Else statement finds the sum of Total Stock Volume when ticker does not change
+            Else
+                total_volume = total_volume + Cells(i, 7).Value
+                
+            End If
+
+        Next i
+        
+        
+
+End Sub
